@@ -1,10 +1,15 @@
-#### v0.2.19rc ???
+#### v0.2.19rc Nanny 911
 * add: Support for COTW hp_australia
 * fix: ADF5 file determination for COTW save files
 * fix: hack? empty `gdc/global.gdcc` in COTW now?
 * add: ash contributed: Added rtpc_v3_flat.ksy
 * fix: verrasse contributed: Fixed missing DLLs & DLL export symbols for Windows builds
 * fix: verrasse contributed: Improved file name guessing (reserves, missions, etc.)
+* fix: verrasse contributed: Fixed backslash hell in Windows-style paths
+* fix: verrasse contributed: Fixed mod build issues
+* fix: verrasse contributed: Fixed ZLIB decompression for ARC/TAB
+* add: verrasse contributed: Support for COTW the Angler (EGS version)
+* add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto)
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo
