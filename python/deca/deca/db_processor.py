@@ -904,9 +904,7 @@ class VfsProcessor(VfsDatabase):
         if UniPath.isfile(filename):
             f_size = os.stat(filename).st_size
 
-            v_path = filename.replace(':', '/')
-            v_path = v_path.replace('\\', '/')
-            v_path = ('__EXTERNAL_FILES__' + v_path).encode('ascii')
+            v_path = UniPath.join('__EXTERNAL_FILES__', '', filename.replace(':', '')).encode('ascii')
             v_hash = self.file_hash(v_path)
 
             # tag atx file type since they have no header info
