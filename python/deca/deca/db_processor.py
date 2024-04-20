@@ -13,7 +13,7 @@ from .db_commands import MultiProcessControl
 from .game_info import determine_game
 from .ff_types import *
 from .ff_adf import AdfDatabase
-from .util import Logger, make_dir_for_file, deca_root
+from .util import Logger, make_dir_for_file, deca_root, system_sleep_prevent, system_sleep_allow
 from .digest import process_translation_adf
 
 
@@ -69,8 +69,13 @@ def vfs_structure_prep(project_file, working_dir, logger=None, debug=False):
     if logger is None:
         logger = Logger(working_dir)
 
+    system_sleep_prevent()
+
     vfs = VfsProcessor(project_file, working_dir, logger)
     vfs.process(debug)
+
+    system_sleep_allow()
+
     return vfs
 
 
