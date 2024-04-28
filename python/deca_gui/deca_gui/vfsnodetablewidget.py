@@ -5,8 +5,8 @@ from deca.db_view import VfsView
 from deca.ff_types import *
 import PySide2
 from PySide2.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal
-from PySide2.QtGui import QColor
-from PySide2.QtWidgets import QHeaderView, QSizePolicy, QTableView, QWidget, QHBoxLayout
+from PySide2.QtGui import QColor, QFont
+from PySide2.QtWidgets import QHeaderView, QSizePolicy, QTableView, QWidget, QHBoxLayout, QAbstractItemView, QApplication
 
 
 class VfsNodeTableModel(QAbstractTableModel):
@@ -136,7 +136,7 @@ class VfsNodeTableModel(QAbstractTableModel):
                     if node.ext_hash is None:
                         return ''
                     else:
-                        return '{:08X}'.format(node.ext_hash)
+                        return '{:08x}'.format(node.ext_hash)
                 elif column == 6:
                     return '{}'.format(node.size_u)
                 elif column == 7:
@@ -184,9 +184,8 @@ class VfsNodeTableWidget(QWidget):
         self.table_view = QTableView()
         self.table_view.clicked.connect(self.clicked)
         self.table_view.doubleClicked.connect(self.double_clicked)
-        font = self.table_view.font()
-        font.setPointSize(8)
-        self.table_view.setFont(font)
+        self.table_view.setSelectionBehavior(QAbstractItemView.SelectRows)
+        self.table_view.setFont(QFont(QApplication.font().family(), QApplication.font().pointSize()))
         # self.table_view.setSortingEnabled(True)
         self.table_view.setModel(self.model)
 
@@ -196,6 +195,11 @@ class VfsNodeTableWidget(QWidget):
         self.horizontal_header.setSectionResizeMode(QHeaderView.Interactive)
         self.vertical_header.setSectionResizeMode(QHeaderView.Interactive)
         self.horizontal_header.setStretchLastSection(True)
+        # To calculate default cell height we should use painters font-metrics instead of constructing a QFontMetrics(font)
+        # N * [line-height] + 2 * [1 pixel space around]
+        self.vertical_header.setMinimumSectionSize(    self.table_view.fontMetrics().lineSpacing() + 2)
+        self.vertical_header.setDefaultSectionSize(2 * self.table_view.fontMetrics().lineSpacing() + 2)
+        self.vertical_header.setVisible(False)
 
         # QWidget Layout
         self.main_layout = QHBoxLayout()

@@ -5,8 +5,8 @@ from deca.db_processor import VfsNode
 from deca.ff_types import *
 from deca.dxgi_types import dxgi_name_db
 from PySide2.QtCore import QAbstractItemModel, QModelIndex, Qt, Signal
-from PySide2.QtGui import QColor
-from PySide2.QtWidgets import QHeaderView, QSizePolicy, QWidget, QHBoxLayout, QTreeView, QAbstractItemView
+from PySide2.QtGui import QColor, QFont
+from PySide2.QtWidgets import QHeaderView, QSizePolicy, QWidget, QHBoxLayout, QTreeView, QAbstractItemView, QApplication
 
 
 class VfsDirLeaf(object):
@@ -194,7 +194,7 @@ class VfsDirModel(QAbstractItemModel):
                     if vnode.v_hash is None:
                         return ''
                     else:
-                        return '{:08X}'.format(vnode.v_hash)
+                        return '{:08x}'.format(vnode.v_hash)
                 elif column == 5:
                     if vnode.ext_hash is None:
                         return ''
@@ -243,6 +243,7 @@ class VfsDirWidget(QWidget):
         font.setPointSize(8)
         self.view.setFont(font)
         self.view.setModel(self.source_model)
+        self.view.setFont(QFont(QApplication.font().family(), QApplication.font().pointSize()))
 
         # # QTableView Headers
         self.header = self.view.header()

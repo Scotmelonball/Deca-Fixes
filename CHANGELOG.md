@@ -11,6 +11,7 @@
 * add: verrasse contributed: Support for COTW the Angler (EGS version)
 * add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto)
 * fix: verrasse contributed: Prevent the system from going to sleep while processing VFS (Windows)
+* fix: verrasse contributed: Fixed positioning of GUI elements
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo

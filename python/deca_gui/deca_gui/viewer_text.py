@@ -30,6 +30,7 @@ class DataViewerText(DataViewer):
         self.list_view.setSelectionMode(QAbstractItemView.ExtendedSelection)
 
         font = QFont("Courier", 8)
+        font.setStyleHint(QFont.Courier)
         self.list_view.setFont(font)
 
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)
