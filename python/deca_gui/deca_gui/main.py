@@ -128,7 +128,7 @@ class MainWindow(QMainWindow):
 
         self.ui.data_view.data_source_set(self.data_source)
 
-        self.ui.filter_edit.setText('.*')
+        self.update_ui_state()
 
     def eventFilter(self, source, event):
         if event.type() == QEvent.KeyRelease and source is self.ui.filter_edit:
@@ -243,6 +243,7 @@ class MainWindow(QMainWindow):
             self.ui.bt_mod_build.setEnabled(True)
             self.ui.action_external_add.setEnabled(True)
             self.ui.action_make_web_map.setEnabled(True)
+        self.filter_text_changed()
 
     def update_select_state(self, vfs_view):
         if vfs_view == self.vfs_view_current():
@@ -418,7 +419,11 @@ class MainWindow(QMainWindow):
 
     def filter_text_changed(self):
         txt = self.filter_text_get()
-        same = False
+        
+        valid = False
+        changed = False
+        has_vfs = self.vfs_view_current() is not None
+
         try:
             valid = True
             re.compile(txt)  # test compile
@@ -426,18 +431,19 @@ class MainWindow(QMainWindow):
             valid = False
 
         if self.vfs_view_current():
-            same = txt == to_unicode(self.vfs_view_current().mask)
+            changed = txt != to_unicode(self.vfs_view_current().mask)
 
         if not valid:
             ss = 'QLineEdit {background-color: red;}'
-        elif same:
+        elif not changed:
             ss = ''
         else:
             ss = 'QLineEdit {background-color: yellow;}'
 
         self.ui.filter_edit.setStyleSheet(ss)
-        self.ui.filter_set_bt.setEnabled(valid and not same)
-        self.ui.filter_clear_bt.setEnabled(not same)
+        self.ui.filter_edit.setEnabled(has_vfs)
+        self.ui.filter_set_bt.setEnabled(has_vfs and valid and changed)
+        self.ui.filter_clear_bt.setEnabled(has_vfs and changed)
 
     def filter_text_key_release(self, source, event: QKeyEvent):
         if event.text() == '\r':

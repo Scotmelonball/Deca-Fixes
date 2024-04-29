@@ -71,6 +71,7 @@ class VfsView:
         print('VfsView.mask_set')
         self._nodes_visible_dirty = True
         self.mask = mask
+        self.paths = set()
         self.signal_visible_changed.call()
 
     def paths_count(self):
