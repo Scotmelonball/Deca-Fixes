@@ -10,6 +10,7 @@
 * fix: verrasse contributed: Fixed ZLIB decompression for ARC/TAB
 * add: verrasse contributed: Support for COTW the Angler (EGS version)
 * add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto)
+* add: verrasse / r-one contributed: Added more filenames for COTW the Angler
 * fix: verrasse contributed: Prevent the system from going to sleep while processing VFS (Windows)
 * fix: verrasse contributed: Fixed positioning of GUI elements
 * fix: verrasse contributed: Fixed bug where the SARC parser was generating nameless symlinks
