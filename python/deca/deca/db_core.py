@@ -606,14 +606,21 @@ class VfsDatabase(DbBase):
         r1 = db_to_vfs_node(r1)
         return r1
 
-    # def nodes_where_uid(self, uids):
-    #     nodes = self.db_query_one(
-    #         "select * from core_nodes where node_id in (?)",
-    #         [uids],
-    #         dbg='nodes_where_uid')
-    #
-    #     nodes = [db_to_vfs_node(node) for node in nodes]
-    #     return nodes
+    def nodes_where_uid(self, uids, output=None):
+        if output is not None:
+            result_str = output
+        else:
+            result_str = '*'
+        nodes = []
+        CHUNK_SIZE = 512 # limit to SQLITE_MAX_VARIABLE_NUMBER and SQLITE_LIMIT_SQL_LENGTH
+        for i in range(0, len(uids), CHUNK_SIZE):
+            nodes += self.db_query_all(
+                "select " + result_str + " from core_nodes where node_id in (" + ",".join(map(str, uids[i:i + CHUNK_SIZE])) + ")",
+                dbg='nodes_where_uid')
+        if output is not None:
+            return nodes
+        else:
+            return [db_to_vfs_node(node) for node in nodes]
 
     def nodes_where_match(
             self,

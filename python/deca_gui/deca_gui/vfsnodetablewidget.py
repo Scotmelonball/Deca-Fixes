@@ -225,9 +225,14 @@ class VfsNodeTableWidget(QWidget):
     def clicked(self, index):
         if index.isValid():
             if self.model.vfs_view is not None:
-                items = list(set([self.model.uid_table[idx.row()] for idx in self.table_view.selectedIndexes()]))
-                items = [self.model.vfs_view.node_where_uid(i) for i in items]
-                self.model.vfs_view.paths_set(items)
+                #see: https://bugreports.qt.io/browse/QTBUG-59478
+                items = list()
+                selection = self.table_view.selectionModel().selection()
+                for selectionRange in selection:
+                    items += self.model.uid_table[selectionRange.top(): selectionRange.top() + selectionRange.height()]
+                items = self.model.vfs_view_get().nodes_where_uid(items)
+                items = [item for item in items if item.v_path is not None and item.p_path is None]
+                self.model.vfs_view_get().capture_set(items)
 
     def double_clicked(self, index):
         if index.isValid():

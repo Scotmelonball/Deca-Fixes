@@ -247,7 +247,7 @@ class MainWindow(QMainWindow):
 
     def update_select_state(self, vfs_view):
         if vfs_view == self.vfs_view_current():
-            any_selected = vfs_view.paths_count() > 0
+            any_selected = vfs_view.capture_count() > 0
 
             if not self.ui.filter_edit.hasFocus():
                 self.ui.filter_edit.setText(to_unicode(vfs_view.mask))
@@ -259,7 +259,7 @@ class MainWindow(QMainWindow):
             self.ui.bt_extract_gltf_3d_folder_show.setEnabled(any_selected)
             self.ui.bt_mod_folder_show.setEnabled(any_selected)
 
-            str_vpaths = self.vfs_view_current().paths_summary_str()
+            str_vpaths = self.vfs_view_current().capture_path_summary_str()
             self.ui.bt_extract.setText('EXTRACT: {}'.format(str_vpaths))
             self.ui.bt_extract_gltf_3d.setText('EXTRACT 3D/GLTF2: {}'.format(str_vpaths))
             self.ui.bt_mod_prep.setText('PREP MOD: {}'.format(str_vpaths))
@@ -331,8 +331,8 @@ class MainWindow(QMainWindow):
                 path_required = False
 
             if root:
-                if path_required and (self.vfs_view_current().node_selected_count() > 0):
-                    path = self.vfs_view_current().common_prefix()
+                if path_required and (self.vfs_view_current().capture_count() > 0):
+                    path = self.vfs_view_current().capture_path_common_prefix()
                     path = UniPath.join(root, path)
                     if not UniPath.isdir(path):
                         path = UniPath.dirname(path)

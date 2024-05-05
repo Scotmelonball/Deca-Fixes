@@ -42,8 +42,6 @@ class VfsDirBranch(object):
         if self.parent is not None:
             s = self.parent.v_path(True)
             s = s + self.name + '/'
-        if not child_called:
-            s = s + r'%'
         return s
 
     def child_count(self):
@@ -269,7 +267,7 @@ class VfsDirWidget(QWidget):
                 items = self.view.selectedIndexes()
                 items = list(set([idx.internalPointer() for idx in items]))
                 items = [idx.v_path() for idx in items if isinstance(idx, VfsDirLeaf) or isinstance(idx, VfsDirBranch)]
-                self.source_model.vfs_view.paths_set(items)
+                self.source_model.vfs_view_get().capture_set(items)
 
     def double_clicked(self, index):
         if index.isValid():
