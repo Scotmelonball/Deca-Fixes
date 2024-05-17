@@ -263,7 +263,7 @@ class VfsProcessor(VfsDatabase):
             [self.process_no_ftype_with_name, (None, 'process_file_type_find_with_name')],
 
             [self.process_by_ftype_match, (FTYPE_GT0C, 'process_gtoc')],
-            [self.process_by_ftype_match, (FTYPE_GARC, 'process_garc')],
+            [self.process_by_ftype_match, (None, 'process_garc')],
             [self.process_no_ftype, (None, 'process_file_type_find_no_name')],
             [self.process_no_ftype_with_name, (None, 'process_file_type_find_with_name')],
 

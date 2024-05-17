@@ -213,11 +213,7 @@ class TabEntryFileV3(TabEntryFileBase):
             self.offset = f.read_u32(raise_on_no_data=True)
             self.size_c = f.read_u32(raise_on_no_data=True)
             self.size_u = self.size_c
-            self.compression_flags = 0
-            if self.size_c == self.size_u:
-                self.compression_type = compression_00_none
-            else:
-                self.compression_type = compression_v3_zlib
+            self.compression_type = compression_00_none
 
             if f.debug:
                 self.debug()
@@ -242,7 +238,7 @@ class TabEntryFileV4(TabEntryFileBase):
             self.size_u = f.read_u32(raise_on_no_data=True)
             self.file_block_index = f.read_u16(raise_on_no_data=True)
             self.compression_type = f.read_u8(raise_on_no_data=True)
-            self.compression_flags = f.read_u8(raise_on_no_data=True)
+            self.compression_flags = f.read_u8(raise_on_no_data=True) # can be ignored... 0 or 1... probably 1 for compressed ATX/AVTX textures...
 
             if f.debug:
                 print(self.debug())
@@ -267,7 +263,7 @@ class TabEntryFileV5(TabEntryFileBase):
             self.size_u = f.read_u32(raise_on_no_data=True)
             self.file_block_index = f.read_u16(raise_on_no_data=True)
             self.compression_type = f.read_u8(raise_on_no_data=True)
-            self.compression_flags = f.read_u8(raise_on_no_data=True)
+            self.compression_flags = f.read_u8(raise_on_no_data=True) # can be ignored... 0 or 1... probably 1 for compressed ATX/AVTX textures...
 
             if f.debug:
                 print(self.debug())

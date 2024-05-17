@@ -15,6 +15,7 @@
 * fix: verrasse contributed: Fixed positioning of GUI elements
 * fix: verrasse contributed: Fixed bug where the SARC parser was generating nameless symlinks
 * fix: verrasse contributed: Fixed bug in extracting item from raw list tab
+* fix: verrasse contributed: Fixed bug where AAF/GARC files were not always processed correctly
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo

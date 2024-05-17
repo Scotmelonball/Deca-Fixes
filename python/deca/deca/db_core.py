@@ -1268,7 +1268,7 @@ class VfsDatabase(DbBase):
 
         return adf_map, adf_missing
 
-    def generate_cache_file_name(self, node: VfsNode):
+    def generate_cache_file_name(self, node: VfsNode, ext = '.dat'):
         pid = node.pid
         parent_nodes = []
         parent_paths = []
@@ -1283,11 +1283,11 @@ class VfsDatabase(DbBase):
                 if e != '.tab':
                     pp = end0
             else:
-                pp = parent_node.v_hash_to_str() + '.dat'
+                pp = parent_node.v_hash_to_str() + ext
             if pp is not None:
                 parent_paths.append(pp)
         cache_dir = UniPath.join(self.working_dir, '__CACHE__/', *parent_paths[::-1])
-        file_name = UniPath.join(cache_dir, node.v_hash_to_str() + '.dat')
+        file_name = UniPath.join(cache_dir, node.v_hash_to_str() + ext)
 
         global dumped_cache_dir
         if not dumped_cache_dir:
@@ -1296,13 +1296,49 @@ class VfsDatabase(DbBase):
 
         return file_name
 
-    def file_obj_from(self, node: VfsNode):
+    def file_obj_from(self, node: VfsNode, compression_pass = False):
         compression_type = node.compression_type_get()
+        compression_flag = node.compression_flag_get()
+
+        if not compression_pass:
+            if compression_flag in {compression_flag_aaf}:
+                file_name = self.generate_cache_file_name(node, '.xdat')
+                if not UniPath.isfile(file_name):
+                    
+                    # Extract AAF from compressed ARC/TAB
+                    if compression_type in {compression_v4_01_zlib, compression_v4_03_zstd, compression_v4_04_oo}:
+                        in_buffer = self.file_obj_from(node, True)
+
+                    # Extract AAF from non-compressed ARC/TAB
+                    elif compression_type in {compression_00_none}:
+                        parent_node = self.node_where_uid(node.pid)
+                        with ArchiveFile(self.file_obj_from(parent_node, True)) as pf:
+                            pf.seek(node.offset)
+                            in_buffer = pf.read(node.size_c)
+                            in_buffer = io.BytesIO(in_buffer)
+                    else:
+                        self.logger.log(f'NOT IMPLEMENTED: COMPRESSION TYPE {compression_type}: B: id:{node.uid}, pid:{node.pid}, v:{node.v_path}, p:{node.p_path}, cs:{node.size_c}, us:{node.size_u}')
+                        raise EDecaUnknownCompressionType(compression_type)
+
+                    # Extract file from AAF container
+                    # self.logger.log(f'B: id:{node.uid}, pid:{node.pid}, v:{node.v_path}, p:{node.p_path}, cs:{node.size_c}, us:{node.size_u}')
+                    buffer_out = extract_aaf(ArchiveFile(in_buffer))
+                    # self.logger.log(f'E: id:{node.uid}, pid:{node.pid}, v:{node.v_path}, p:{node.p_path}, cs:{node.size_c}, us:{node.size_u}')
+
+                    make_dir_for_file(file_name)
+                    with open(file_name, 'wb') as f_out:
+                        f_out.write(buffer_out)
+
+                    return io.BytesIO(buffer_out)
+                else:
+                    return open(file_name, 'rb')
 
         if node.file_type == FTYPE_ARC:
             return open(node.p_path, 'rb')
         elif node.file_type == FTYPE_TAB:
             return self.file_obj_from(self.node_where_uid(node.pid))
+
+        # 2024.05.20... Deprecated! This block of code can be safely removed. We will keep it for a while for compatibility purposes.
         elif compression_type in {compression_v3_zlib}:
             file_name = self.generate_cache_file_name(node)
             if not UniPath.isfile(file_name):

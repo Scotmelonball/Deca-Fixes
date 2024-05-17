@@ -488,7 +488,6 @@ class Processor:
                     v_hash=te.hashname, pid=node.uid, index=i,
                     offset=te.offset, size_c=te.size_c, size_u=te.size_u,
                     compression_type=te.compression_type,
-                    compression_flag=te.compression_flags,
                     blocks=blocks)
 
                 db.node_add(cnode)
@@ -870,10 +869,11 @@ class Processor:
         if len(gtoc_archives) == 0:
             self._comm.trace('No gtoc archives found for {} {} {}'.format(
                 node.uid, node.v_hash_to_str(), node.v_path))
-        elif len(gtoc_archives) > 1:
-            self._comm.log('TOO MANY!!! {} gtoc archives found for {} {} {}'.format(
-                len(gtoc_archives), node.uid, node.v_hash_to_str(), node.v_path))
-        else:
+        else: 
+            if len(gtoc_archives) > 1:
+                self._comm.log('TOO MANY!!! {} gtoc archives found for {} {} {}'.format(
+                    len(gtoc_archives), node.uid, node.v_hash_to_str(), node.v_path))
+
             node.file_type = FTYPE_GARC
 
             gtoc_archive: GtocArchiveEntry = gtoc_archives[0]

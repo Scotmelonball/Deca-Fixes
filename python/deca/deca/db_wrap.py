@@ -75,7 +75,7 @@ def determine_file_type(vfs: VfsDatabase, node: VfsNode):
                             determine_file_type_and_size(f, node.size_c)
 
     if node.file_type == FTYPE_AAF:
-        node.compression_type_set(compression_v3_zlib)
+        node.compression_flag_set(compression_flag_aaf)
         with vfs.file_obj_from(node) as f:
             node.file_type, node.size_u, node.magic, node.file_sub_type = \
                 determine_file_type_and_size(f, node.size_u)
