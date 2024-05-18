@@ -189,10 +189,7 @@ class VfsDirModel(QAbstractItemModel):
                     else:
                         return '{} ({})'.format(dxgi_name_db.get(vnode.file_sub_type, 'UNKNOWN'), vnode.file_sub_type)
                 elif column == 4:
-                    if vnode.v_hash is None:
-                        return ''
-                    else:
-                        return '{:08x}'.format(vnode.v_hash)
+                    return vnode.v_hash_to_str()
                 elif column == 5:
                     if vnode.ext_hash is None:
                         return ''
