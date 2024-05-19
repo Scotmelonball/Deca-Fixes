@@ -141,6 +141,7 @@ class GameInfoJson(GameInfo):
         self._pfs_ftype = jdata.get('pfs_ftype', '').split(',')
         self._file_assoc = jdata.get('file_assoc', [])
         self._has_garcs = jdata.get('has_garcs', False)
+        self._final_queries = jdata.get('final_queries', [])
 
         if self.game_dir.endswith('/') or self.game_dir.endswith('\\'):
             gd = self.game_dir[:-1]
@@ -196,6 +197,9 @@ class GameInfoJson(GameInfo):
 
     def has_garcs(self):
         return self._has_garcs
+
+    def final_queries(self):
+        return self._final_queries
 
 
 class GameInfoGZ(GameInfo):

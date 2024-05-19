@@ -84,5 +84,8 @@
       ".cfx": "gfx",
       ".gfx": "gfx"
     }
+  ],
+  "final_queries": [
+    "UPDATE core_nodes SET v_path=('__ROOT__/' || COALESCE(file_type, 'none') || '/' || v_path) WHERE (v_path IS NOT NULL) AND (v_path NOT LIKE '%/%') AND (p_path IS NULL);"
   ]
 }

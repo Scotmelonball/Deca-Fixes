@@ -339,6 +339,7 @@ class VfsProcessor(VfsDatabase):
                     break
 
             self.update_used_depths()
+            self.execute_final_queries()
             self.db_execute_one("PRAGMA user_version = 2;")
 
             self.dump_vpaths()
@@ -893,6 +894,21 @@ class VfsProcessor(VfsDatabase):
                         keep_going = True
                         child_node.used_at_runtime_depth = level
                         db.node_update(child_node)
+
+    def execute_final_queries(self):
+        final_queries = self.game_info.final_queries()
+        count = len(final_queries)
+        if count:
+            self.logger.log('EXECUTING FINAL QUERIES...')
+            try:
+                for index in range(count):
+                    self.db_execute_one(final_queries[index])
+                self.db_conn.commit()
+                self.db_changed_signal.call()
+                self.logger.log('EXECUTING FINAL QUERIES: SUCCESS!')
+            except sqlite3.OperationalError as exc:
+                self.db_conn.rollback()
+                self.logger.log('EXECUTING FINAL QUERIES: FAILED!')
 
     def process_remove_temporary_nodes(self):
         uids = self.nodes_where_temporary_select_uid(True)
