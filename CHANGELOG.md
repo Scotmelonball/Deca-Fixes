@@ -17,6 +17,7 @@
 * fix: verrasse contributed: Fixed bug in extracting item from raw list tab
 * fix: verrasse contributed: Fixed bug where AAF/GARC files were not always processed correctly
 * fix: verrasse contributed: Fixed MVC/GUI issues when multiple projects are open simultaneously
+* add: verrasse contributed: Support for Mad Max (v1.0.3.0 + All DLCs)
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo

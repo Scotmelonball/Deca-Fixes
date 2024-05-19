@@ -1306,7 +1306,7 @@ class VfsDatabase(DbBase):
                 if not UniPath.isfile(file_name):
                     
                     # Extract AAF from compressed ARC/TAB
-                    if compression_type in {compression_v4_01_zlib, compression_v4_03_zstd, compression_v4_04_oo}:
+                    if compression_type in {compression_v2_zlib, compression_v4_01_zlib, compression_v4_03_zstd, compression_v4_04_oo}:
                         in_buffer = self.file_obj_from(node, True)
 
                     # Extract AAF from non-compressed ARC/TAB
@@ -1337,6 +1337,21 @@ class VfsDatabase(DbBase):
             return open(node.p_path, 'rb')
         elif node.file_type == FTYPE_TAB:
             return self.file_obj_from(self.node_where_uid(node.pid))
+
+        elif compression_type in {compression_v2_zlib}:
+            file_name = self.generate_cache_file_name(node)
+            if not UniPath.isfile(file_name):
+                parent_node = self.node_where_uid(node.pid)
+                make_dir_for_file(file_name)
+                with self.file_obj_from(parent_node) as f_in:
+                    f_in.seek(node.offset)
+                    in_buffer = f_in.read(node.size_c)
+                    buffer_out = zlib.decompress(in_buffer, -15)
+                with open(file_name, 'wb') as f_out:
+                    f_out.write(buffer_out)
+                return io.BytesIO(buffer_out)
+            else:
+                return open(file_name, 'rb')
 
         # 2024.05.20... Deprecated! This block of code can be safely removed. We will keep it for a while for compatibility purposes.
         elif compression_type in {compression_v3_zlib}:
