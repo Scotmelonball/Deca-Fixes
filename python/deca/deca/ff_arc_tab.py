@@ -76,22 +76,30 @@ class TabFileV2(TabFileBase):
     def deserialize(self, f):
         self.magic = f.read(4)
        
-        self.header_unknown = {}
-        header_entry_count = f.read_u32()
-        for i in range(header_entry_count):
-            blocks = []
+        chunked_files_table = {}
+        chunked_files_count = f.read_u32()
+        for i in range(chunked_files_count):
             hashname = f.read_u32()
-            block_entry_count = f.read_u32()
-            for k in range(block_entry_count):
-                unknown_1 = f.read_u32()
-                unknown_2 = f.read_u32()
-                blocks.append([unknown_1, unknown_2])
-            self.header_unknown[hashname] = blocks
+            blocks = []
+            blocks_count = f.read_u32()
+            for k in range(blocks_count):
+                offset_u = f.read_u32()
+                offset_c = f.read_u32()
+                blocks.append([offset_c, offset_u])
+            chunked_files_table[hashname] = blocks
 
         self.file_table = []
         self.file_hash_map = {}
         entry = TabEntryFileV2()
         while entry.deserialize(f):
+            if entry.hashname in chunked_files_table:
+                entry.file_block_table = []
+                blocks = chunked_files_table[entry.hashname]
+                blocks.append([entry.size_c, entry.size_u])
+                for i in range(0, len(blocks) - 1):
+                    block_len_c = blocks[i+1][0] - blocks[i][0]
+                    block_len_u = blocks[i+1][1] - blocks[i][1]
+                    entry.file_block_table.append([block_len_c, block_len_u])
             self.file_table.append(entry)
             self.file_hash_map[entry.hashname] = entry
             entry = TabEntryFileV2()

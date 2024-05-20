@@ -231,7 +231,7 @@ class VfsNodeTableWidget(QWidget):
                 for selectionRange in selection:
                     items += self.model.uid_table[selectionRange.top(): selectionRange.top() + selectionRange.height()]
                 items = self.model.vfs_view_get().nodes_where_uid(items)
-                items = [item for item in items if item.v_path is not None and item.p_path is None]
+                items = [item for item in items if item.file_type != FTYPE_SYMLINK and item.v_path is not None and item.p_path is None]
                 self.model.vfs_view_get().capture_set(items)
 
     def double_clicked(self, index):

@@ -1312,7 +1312,7 @@ class VfsDatabase(DbBase):
                     # Extract AAF from non-compressed ARC/TAB
                     elif compression_type in {compression_00_none}:
                         parent_node = self.node_where_uid(node.pid)
-                        with ArchiveFile(self.file_obj_from(parent_node, True)) as pf:
+                        with ArchiveFile(self.file_obj_from(parent_node)) as pf:
                             pf.seek(node.offset)
                             in_buffer = pf.read(node.size_c)
                             in_buffer = io.BytesIO(in_buffer)
@@ -1337,6 +1337,8 @@ class VfsDatabase(DbBase):
             return open(node.p_path, 'rb')
         elif node.file_type == FTYPE_TAB:
             return self.file_obj_from(self.node_where_uid(node.pid))
+        elif node.file_type == FTYPE_SYMLINK:
+            return io.BytesIO(bytearray())
 
         elif compression_type in {compression_v2_zlib}:
             file_name = self.generate_cache_file_name(node)
@@ -1344,9 +1346,22 @@ class VfsDatabase(DbBase):
                 parent_node = self.node_where_uid(node.pid)
                 make_dir_for_file(file_name)
                 with self.file_obj_from(parent_node) as f_in:
-                    f_in.seek(node.offset)
-                    in_buffer = f_in.read(node.size_c)
-                    buffer_out = zlib.decompress(in_buffer, -15)
+                    buffer_out = b''
+                    
+                    blocks = node.blocks_get(self)
+                    if blocks:
+                        for bi, (block_offset, compressed_len, uncompressed_len) in enumerate(blocks):
+                            f_in.seek(block_offset)
+                            in_buffer = f_in.read(compressed_len)
+                            if compressed_len == uncompressed_len:
+                                buffer_out += in_buffer
+                            else:
+                                buffer_out += zlib.decompress(in_buffer, -15)
+                    else:
+                        f_in.seek(node.offset)
+                        in_buffer = f_in.read(node.size_c)
+                        buffer_out = zlib.decompress(in_buffer, -15)
+
                 with open(file_name, 'wb') as f_out:
                     f_out.write(buffer_out)
                 return io.BytesIO(buffer_out)
