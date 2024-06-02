@@ -3,6 +3,7 @@ import os
 import struct
 import weakref
 import sys
+import ctypes
 
 from deca.path import UniPath
 
@@ -139,4 +140,22 @@ def deca_root():
     # print(f"{frozen=}")
 
     return bundle_dir
+
+
+# THREAD EXECUTION STATES
+ES_CONTINUOUS        = 0x80000000
+ES_SYSTEM_REQUIRED   = 0x00000001
+ES_DISPLAY_REQUIRED  = 0x00000002
+ES_USER_PRESENT      = 0x00000004 
+ES_AWAYMODE_REQUIRED = 0x00000040
+
+# Prevent the system from going to sleep
+def system_sleep_prevent():
+    if os.name == 'nt':
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS | ES_SYSTEM_REQUIRED)
+
+# Allow the system to sleep normally
+def system_sleep_allow():
+    if os.name == 'nt':
+        ctypes.windll.kernel32.SetThreadExecutionState(ES_CONTINUOUS)
 

@@ -112,9 +112,8 @@ class FileSarc:
 
             if self.ver2 == 2:
                 self.entries_begin = f.tell()
-                end_pos = f.tell() + self.dir_block_len
                 idx = 0
-                while f.tell() + 12 <= end_pos:  # 12 is minimum length of v2 sarc entry and they pad with some zeros
+                while f.tell() < self.dir_block_len:
                     entry = EntrySarc(idx)
                     entry.deserialize_v2(f)
                     self.entries.append(entry)

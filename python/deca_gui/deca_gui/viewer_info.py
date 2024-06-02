@@ -10,6 +10,7 @@ class DataViewerInfo(DataViewer):
         self.text_box = QTextEdit()
         self.text_box.setReadOnly(True)
         font = QFont("Courier", 8)
+        font.setStyleHint(QFont.Courier)
         self.text_box.setFont(font)
         self.text_box.setLineWrapMode(QTextEdit.LineWrapMode.NoWrap)
         size = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Preferred)

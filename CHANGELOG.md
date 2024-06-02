@@ -10,6 +10,14 @@
 * fix: verrasse contributed: Fixed ZLIB decompression for ARC/TAB
 * add: verrasse contributed: Support for COTW the Angler (EGS version)
 * add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto)
+* add: verrasse / r-one contributed: Added more filenames for COTW the Angler
+* fix: verrasse contributed: Prevent the system from going to sleep while processing VFS (Windows)
+* fix: verrasse contributed: Fixed positioning of GUI elements
+* fix: verrasse contributed: Fixed bug where the SARC parser was generating nameless symlinks
+* fix: verrasse contributed: Fixed bug in extracting item from raw list tab
+* fix: verrasse contributed: Fixed bug where AAF/GARC files were not always processed correctly
+* fix: verrasse contributed: Fixed MVC/GUI issues when multiple projects are open simultaneously
+* add: verrasse contributed: Support for Mad Max (v1.0.3.0 + All DLCs)
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo

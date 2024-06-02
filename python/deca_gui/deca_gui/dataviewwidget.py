@@ -61,6 +61,7 @@ class DataViewWidget(QWidget):
 
         self.main_layout = QVBoxLayout()
         self.main_layout.addWidget(self.tab_widget)
+        self.main_layout.setContentsMargins(0,0,0,0);
         self.setLayout(self.main_layout)
 
     def data_source_set(self, data_source: IVfsViewSrc):

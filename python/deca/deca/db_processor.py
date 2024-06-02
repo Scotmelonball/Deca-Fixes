@@ -13,7 +13,7 @@ from .db_commands import MultiProcessControl
 from .game_info import determine_game
 from .ff_types import *
 from .ff_adf import AdfDatabase
-from .util import Logger, make_dir_for_file, deca_root
+from .util import Logger, make_dir_for_file, deca_root, system_sleep_prevent, system_sleep_allow
 from .digest import process_translation_adf
 
 
@@ -69,8 +69,13 @@ def vfs_structure_prep(project_file, working_dir, logger=None, debug=False):
     if logger is None:
         logger = Logger(working_dir)
 
+    system_sleep_prevent()
+
     vfs = VfsProcessor(project_file, working_dir, logger)
     vfs.process(debug)
+
+    system_sleep_allow()
+
     return vfs
 
 
@@ -258,7 +263,7 @@ class VfsProcessor(VfsDatabase):
             [self.process_no_ftype_with_name, (None, 'process_file_type_find_with_name')],
 
             [self.process_by_ftype_match, (FTYPE_GT0C, 'process_gtoc')],
-            [self.process_by_ftype_match, (FTYPE_GARC, 'process_garc')],
+            [self.process_by_ftype_match, (None, 'process_garc')],
             [self.process_no_ftype, (None, 'process_file_type_find_no_name')],
             [self.process_no_ftype_with_name, (None, 'process_file_type_find_with_name')],
 
@@ -334,6 +339,7 @@ class VfsProcessor(VfsDatabase):
                     break
 
             self.update_used_depths()
+            self.execute_final_queries()
             self.db_execute_one("PRAGMA user_version = 2;")
 
             self.dump_vpaths()
@@ -889,6 +895,21 @@ class VfsProcessor(VfsDatabase):
                         child_node.used_at_runtime_depth = level
                         db.node_update(child_node)
 
+    def execute_final_queries(self):
+        final_queries = self.game_info.final_queries()
+        count = len(final_queries)
+        if count:
+            self.logger.log('EXECUTING FINAL QUERIES...')
+            try:
+                for index in range(count):
+                    self.db_execute_one(final_queries[index])
+                self.db_conn.commit()
+                self.db_changed_signal.call()
+                self.logger.log('EXECUTING FINAL QUERIES: SUCCESS!')
+            except sqlite3.OperationalError as exc:
+                self.db_conn.rollback()
+                self.logger.log('EXECUTING FINAL QUERIES: FAILED!')
+
     def process_remove_temporary_nodes(self):
         uids = self.nodes_where_temporary_select_uid(True)
         uids = [(uid, ) for uid in uids]
@@ -899,9 +920,7 @@ class VfsProcessor(VfsDatabase):
         if UniPath.isfile(filename):
             f_size = os.stat(filename).st_size
 
-            v_path = filename.replace(':', '/')
-            v_path = v_path.replace('\\', '/')
-            v_path = ('__EXTERNAL_FILES__' + v_path).encode('ascii')
+            v_path = UniPath.join('__EXTERNAL_FILES__', '', filename.replace(':', '')).encode('ascii')
             v_hash = self.file_hash(v_path)
 
             # tag atx file type since they have no header info
