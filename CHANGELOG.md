@@ -1,5 +1,6 @@
 #### v0.2.19rc Nanny 911
 * add: Support for COTW hp_australia
+* add: Support for COTW hp_nepal
 * fix: ADF5 file determination for COTW save files
 * fix: hack? empty `gdc/global.gdcc` in COTW now?
 * add: ash contributed: Added rtpc_v3_flat.ksy
