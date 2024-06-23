@@ -10,7 +10,7 @@
 * fix: verrasse contributed: Fixed mod build issues
 * fix: verrasse contributed: Fixed ZLIB decompression for ARC/TAB
 * add: verrasse contributed: Support for COTW the Angler (EGS version)
-* add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto)
+* add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto, doris)
 * add: verrasse / r-one contributed: Added more filenames for COTW the Angler
 * fix: verrasse contributed: Prevent the system from going to sleep while processing VFS (Windows)
 * fix: verrasse contributed: Fixed positioning of GUI elements
