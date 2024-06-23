@@ -11,7 +11,8 @@
     "achelous_",
     "alpheus_",
     "belisama_",
-    "ceto_"
+    "ceto_",
+    "doris_"
   ],
   "world_indexes": [0,1,2,3,4,5],
   "world_patches": [
@@ -44,7 +45,13 @@
     "worlds/ceto/terrain/patches/width_8/",
     "worlds/ceto/terrain/veg_streampatches/width_3/",
     "worlds/ceto/terrain/veg_streampatches/width_4/",
-    "worlds/ceto/terrain/veg_streampatches/width_8/"
+    "worlds/ceto/terrain/veg_streampatches/width_8/",
+
+    "worlds/doris/terrain/patches/width_3/",
+    "worlds/doris/terrain/patches/width_8/",
+    "worlds/doris/terrain/veg_streampatches/width_3/",
+    "worlds/doris/terrain/veg_streampatches/width_4/",
+    "worlds/doris/terrain/veg_streampatches/width_8/"
 
   ],
   "world_occluders": [
@@ -52,21 +59,24 @@
     "worlds/achelous/terrain/occluder/",
     "worlds/alpheus/terrain/occluder/",
     "worlds/belisama/terrain/occluder/",
-    "worlds/ceto/terrain/occluder/"
+    "worlds/ceto/terrain/occluder/",
+    "worlds/doris/terrain/occluder/"
   ],
   "world_navheightfields": [
     "worlds/empty/terrain/hp/navheightfield/globalhires/",
     "worlds/achelous/terrain/hp/navheightfield/globalhires/",
     "worlds/alpheus/terrain/hp/navheightfield/globalhires/",
     "worlds/belisama/terrain/hp/navheightfield/globalhires/",
-    "worlds/ceto/terrain/hp/navheightfield/globalhires/"
+    "worlds/ceto/terrain/hp/navheightfield/globalhires/",
+    "worlds/doris/terrain/hp/navheightfield/globalhires/"
   ],
   "world_hm": [
     "worlds/empty/terrain/hp/horizonmap/horizon_${AREA_PREFIX}",
     "worlds/achelous/terrain/hp/horizonmap/horizon_${AREA_PREFIX}",
     "worlds/alpheus/terrain/hp/horizonmap/horizon_${AREA_PREFIX}",
     "worlds/belisama/terrain/hp/horizonmap/horizon_${AREA_PREFIX}",
-    "worlds/ceto/terrain/hp/horizonmap/horizon_${AREA_PREFIX}"
+    "worlds/ceto/terrain/hp/horizonmap/horizon_${AREA_PREFIX}",
+    "worlds/doris/terrain/hp/horizonmap/horizon_${AREA_PREFIX}"
   ],
   "world_ai": [
     "ai/tiles/",
@@ -75,6 +85,7 @@
     "worlds/alpheus/ai/tiles/",
     "worlds/belisama/ai/tiles/",
     "worlds/ceto/ai/tiles/",
+    "worlds/doris/ai/tiles/",
     "worlds/world${WORLD_INDEX}/ai/tiles/"
   ],
   "map_zooms": [0,1,2,3],
