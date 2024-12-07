@@ -29,7 +29,9 @@ else:
 
 avatar_url = 'https://upload.wikimedia.org/wikipedia/commons/thumb/b/bc/Appveyor_logo.svg/256px-Appveyor_logo.svg.png'
 
-APPVEYOR_REPO_COMMIT = os.environ.get("APPVEYOR_REPO_COMMIT", None)
+APPVEYOR_REPO_COMMIT = None
+
+# APPVEYOR_REPO_COMMIT = os.environ.get("APPVEYOR_REPO_COMMIT", None)
 APPVEYOR_BUILD_VERSION = os.environ.get("APPVEYOR_BUILD_VERSION", None)
 APPVEYOR_BUILD_NUMBER = os.environ.get("APPVEYOR_BUILD_NUMBER", None)
 APPVEYOR_REPO_NAME = os.environ.get("APPVEYOR_REPO_NAME", None)
