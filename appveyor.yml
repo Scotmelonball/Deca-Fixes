@@ -84,7 +84,7 @@ build_script:
 
     pip install wheel 
     
-    pip install -r python/requirements.txt
+    pip install -r python/requirements_latest.txt
 
     pip install pyinstaller
 
