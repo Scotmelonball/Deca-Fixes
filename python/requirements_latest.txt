@@ -1,5 +1,4 @@
 kaitaistruct
-llvmlite
 matplotlib
 mmh3
 numba

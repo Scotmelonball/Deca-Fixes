@@ -2,6 +2,9 @@ version: build-{build}
 max_jobs: 1
 image: Visual Studio 2022
 clone_folder: C:\prj\deca
+
+skip_branch_with_pr: true
+
 build_script:
 - cmd: >-
     SET
@@ -123,3 +126,4 @@ deploy:
 on_success:
   - ps: cd C:\prj\deca
   - ps: python ./appveyor/on_success.py success CHANGELOG.md $env:BUILD_WEBHOOK_URL
+

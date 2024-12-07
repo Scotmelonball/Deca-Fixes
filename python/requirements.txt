@@ -1,5 +1,4 @@
 kaitaistruct==0.10
-llvmlite==0.43.0
 matplotlib==3.9.3
 mmh3==5.0.1
 numba==0.60.0
