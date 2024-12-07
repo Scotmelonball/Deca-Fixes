@@ -9,7 +9,7 @@ build_script:
 - cmd: >-
     SET
 
-    SET PATH=C:\Python38-x64;C:\Python38-x64\Scripts;%path%
+    SET PATH=C:\Python312-x64;C:\Python312-x64\Scripts;%path%
 
 
     echo GET SUBMODULES
@@ -72,11 +72,11 @@ build_script:
 
     cd C:\prj\deca
 
-    c:\Python38-x64\python --version
+    c:\Python312-x64\python --version
 
-    c:\Python38-x64\python -m pip list
+    c:\Python312-x64\python -m pip list
 
-    c:\Python38-x64\python -m venv venv
+    c:\Python312-x64\python -m venv venv
 
     venv\Scripts\activate
 
@@ -84,7 +84,7 @@ build_script:
 
     pip install wheel 
     
-    pip install -r python/requirements_latest.txt
+    pip install -r python/requirements.txt
 
     pip install pyinstaller
 
