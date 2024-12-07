@@ -1,5 +1,5 @@
 kaitaistruct==0.10
-matplotlib==3.9.3
+matplotlib==3.7.5
 mmh3==5.0.1
 numba==0.60.0
 numpy==2.0.2
