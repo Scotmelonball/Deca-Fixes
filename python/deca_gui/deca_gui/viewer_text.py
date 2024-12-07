@@ -1,8 +1,8 @@
 from .viewer import *
 from deca.file import ArchiveFile
-from PySide2.QtCore import QStringListModel
-from PySide2.QtGui import QFont, QKeyEvent, QKeySequence, QGuiApplication
-from PySide2.QtWidgets import QSizePolicy, QVBoxLayout, QListView, QAbstractItemView
+from PySide6.QtCore import QStringListModel
+from PySide6.QtGui import QFont, QKeyEvent, QKeySequence, QGuiApplication
+from PySide6.QtWidgets import QSizePolicy, QVBoxLayout, QListView, QAbstractItemView
 import io
 
 

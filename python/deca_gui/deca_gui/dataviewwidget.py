@@ -12,8 +12,8 @@ from .viewer_text import DataViewerText
 from .viewer_sarc import DataViewerSarc
 from .viewer_obc import DataViewerObc
 from .deca_interfaces import IVfsViewSrc
-from PySide2.QtCore import Signal
-from PySide2.QtWidgets import QSizePolicy, QWidget, QVBoxLayout, QTabWidget
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QSizePolicy, QWidget, QVBoxLayout, QTabWidget
 
 
 class DataViewWidget(QWidget):

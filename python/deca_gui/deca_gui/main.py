@@ -16,9 +16,9 @@ from .main_window import Ui_MainWindow
 from .deca_interfaces import IVfsViewSrc
 from .vfsdirwidget import VfsDirWidget
 from .vfsnodetablewidget import VfsNodeTableWidget
-from PySide2.QtCore import Slot, QUrl, Signal, QEvent
-from PySide2.QtWidgets import QApplication, QMainWindow, QTabBar, QMessageBox, QFileDialog, QStyle
-from PySide2.QtGui import QDesktopServices, QKeyEvent
+from PySide6.QtCore import Slot, QUrl, Signal, QEvent
+from PySide6.QtWidgets import QApplication, QMainWindow, QTabBar, QMessageBox, QFileDialog, QStyle
+from PySide6.QtGui import QDesktopServices, QKeyEvent
 
 window_title = 'decaGUI: v0.2.19rc'
 
