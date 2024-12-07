@@ -203,7 +203,7 @@ class VfsDirModel(QAbstractItemModel):
                     return '{}, {}, {}'.format(node.in_gdcc_count, len(node.uids_hard), len(node.uids_sym))
                 elif column == 9:
                     return '{}'.format(self.vfs_view.lookup_note_from_file_path(vnode.v_path))
-        elif role == Qt.BackgroundColorRole:
+        elif role == Qt.BackgroundRole:
             if isinstance(node, VfsDirLeaf):
                 uid = node.uids[0]
                 vnode: VfsNode = self.vfs_view.node_where_uid(uid)
