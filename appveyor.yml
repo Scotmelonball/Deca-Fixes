@@ -35,7 +35,7 @@ build_script:
     
     cd C:\prj\deca\build
 
-    cmake -DPython3_ROOT_DIR=C:\Python38-x64 -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
+    cmake -DPython3_ROOT_DIR=C:\Python312-x64 -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
 
     nmake
 
