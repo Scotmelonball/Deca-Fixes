@@ -4,9 +4,9 @@ from deca.db_view import VfsView
 from deca.db_processor import VfsNode
 from deca.ff_types import *
 from deca.dxgi_types import dxgi_name_db
-from PySide2.QtCore import QAbstractItemModel, QModelIndex, Qt, Signal
-from PySide2.QtGui import QColor, QFont
-from PySide2.QtWidgets import QHeaderView, QSizePolicy, QWidget, QHBoxLayout, QTreeView, QAbstractItemView, QApplication
+from PySide6.QtCore import QAbstractItemModel, QModelIndex, Qt, Signal
+from PySide6.QtGui import QColor, QFont
+from PySide6.QtWidgets import QHeaderView, QSizePolicy, QWidget, QHBoxLayout, QTreeView, QAbstractItemView, QApplication
 
 
 class VfsDirLeaf(object):
@@ -203,7 +203,7 @@ class VfsDirModel(QAbstractItemModel):
                     return '{}, {}, {}'.format(node.in_gdcc_count, len(node.uids_hard), len(node.uids_sym))
                 elif column == 9:
                     return '{}'.format(self.vfs_view.lookup_note_from_file_path(vnode.v_path))
-        elif role == Qt.BackgroundColorRole:
+        elif role == Qt.BackgroundRole:
             if isinstance(node, VfsDirLeaf):
                 uid = node.uids[0]
                 vnode: VfsNode = self.vfs_view.node_where_uid(uid)

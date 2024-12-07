@@ -1,24 +1,25 @@
 #### v0.2.19rc Nanny 911
-* add: Support for COTW hp_australia
-* add: Support for COTW hp_nepal
-* fix: ADF5 file determination for COTW save files
-* fix: hack? empty `gdc/global.gdcc` in COTW now?
-* add: ash contributed: Added rtpc_v3_flat.ksy
-* fix: verrasse contributed: Fixed missing DLLs & DLL export symbols for Windows builds
-* fix: verrasse contributed: Improved file name guessing (reserves, missions, etc.)
-* fix: verrasse contributed: Fixed backslash hell in Windows-style paths
-* fix: verrasse contributed: Fixed mod build issues
-* fix: verrasse contributed: Fixed ZLIB decompression for ARC/TAB
-* add: verrasse contributed: Support for COTW the Angler (EGS version)
-* add: verrasse contributed: Update for latest COTW the Angler (alpheus, belisama, ceto, doris)
-* add: verrasse / r-one contributed: Added more filenames for COTW the Angler
-* fix: verrasse contributed: Prevent the system from going to sleep while processing VFS (Windows)
-* fix: verrasse contributed: Fixed positioning of GUI elements
-* fix: verrasse contributed: Fixed bug where the SARC parser was generating nameless symlinks
-* fix: verrasse contributed: Fixed bug in extracting item from raw list tab
-* fix: verrasse contributed: Fixed bug where AAF/GARC files were not always processed correctly
-* fix: verrasse contributed: Fixed MVC/GUI issues when multiple projects are open simultaneously
-* add: verrasse contributed: Support for Mad Max (v1.0.3.0 + All DLCs)
+* add: kk49: Update Python from 3.8 to 3.12 (support for Ubuntu 24.04!)
+* add: kk49: Support for COTW hp_australia
+* add: kk49: Support for COTW hp_nepal
+* add: verrasse: Support for COTW the Angler (EGS version)
+* add: verrasse: Update for latest COTW the Angler (alpheus, belisama, ceto, doris)
+* add: verrasse / r-one: Added more filenames for COTW the Angler
+* add: verrasse: Support for Mad Max (v1.0.3.0 + All DLCs)
+* add: ash: Added rtpc_v3_flat.ksy
+* fix: kk49: ADF5 file determination for COTW save files
+* fix: kk49: hack? empty `gdc/global.gdcc` in COTW now?
+* fix: verrasse: Fixed missing DLLs & DLL export symbols for Windows builds
+* fix: verrasse: Improved file name guessing (reserves, missions, etc.)
+* fix: verrasse: Fixed backslash hell in Windows-style paths
+* fix: verrasse: Fixed mod build issues
+* fix: verrasse: Fixed ZLIB decompression for ARC/TAB
+* fix: verrasse: Prevent the system from going to sleep while processing VFS (Windows)
+* fix: verrasse: Fixed positioning of GUI elements
+* fix: verrasse: Fixed bug where the SARC parser was generating nameless symlinks
+* fix: verrasse: Fixed bug in extracting item from raw list tab
+* fix: verrasse: Fixed bug where AAF/GARC files were not always processed correctly
+* fix: verrasse: Fixed MVC/GUI issues when multiple projects are open simultaneously
 
 #### v0.2.18 Lucid Knows
 * add: support for Ravenbound Demo

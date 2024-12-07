@@ -2,11 +2,14 @@ version: build-{build}
 max_jobs: 1
 image: Visual Studio 2022
 clone_folder: C:\prj\deca
+
+skip_branch_with_pr: true
+
 build_script:
 - cmd: >-
     SET
 
-    SET PATH=C:\Python38-x64;C:\Python38-x64\Scripts;%path%
+    SET PATH=C:\Python312-x64;C:\Python312-x64\Scripts;%path%
 
 
     echo GET SUBMODULES
@@ -35,7 +38,7 @@ build_script:
     
     cd C:\prj\deca\build
 
-    cmake -DPython3_ROOT_DIR=C:\Python38-x64 -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
+    cmake -DPython3_ROOT_DIR=C:\Python312-x64 -DCMAKE_BUILD_TYPE=Release -G "NMake Makefiles" ..
 
     nmake
 
@@ -69,11 +72,11 @@ build_script:
 
     cd C:\prj\deca
 
-    c:\Python38-x64\python --version
+    c:\Python312-x64\python --version
 
-    c:\Python38-x64\python -m pip list
+    c:\Python312-x64\python -m pip list
 
-    c:\Python38-x64\python -m venv venv
+    c:\Python312-x64\python -m venv venv
 
     venv\Scripts\activate
 
@@ -123,3 +126,4 @@ deploy:
 on_success:
   - ps: cd C:\prj\deca
   - ps: python ./appveyor/on_success.py success CHANGELOG.md $env:BUILD_WEBHOOK_URL
+

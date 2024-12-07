@@ -3,10 +3,10 @@ from .vfs_widgets import used_color_calc
 from deca.db_processor import VfsNode
 from deca.db_view import VfsView
 from deca.ff_types import *
-import PySide2
-from PySide2.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal
-from PySide2.QtGui import QColor, QFont
-from PySide2.QtWidgets import QHeaderView, QSizePolicy, QTableView, QWidget, QHBoxLayout, QAbstractItemView, QApplication
+import PySide6
+from PySide6.QtCore import QAbstractTableModel, QModelIndex, Qt, Signal
+from PySide6.QtGui import QColor, QFont
+from PySide6.QtWidgets import QHeaderView, QSizePolicy, QTableView, QWidget, QHBoxLayout, QAbstractItemView, QApplication
 
 
 class VfsNodeTableModel(QAbstractTableModel):
@@ -51,7 +51,7 @@ class VfsNodeTableModel(QAbstractTableModel):
 
         self.endResetModel()
 
-    def sort(self, column: int, order: PySide2.QtCore.Qt.SortOrder):
+    def sort(self, column: int, order: PySide6.QtCore.Qt.SortOrder):
         # if self.remap_uid is None:
         #     rm = list(range(len(self.vfs_view.table_vfsnode)))
         #     self.remap_uid = rm
