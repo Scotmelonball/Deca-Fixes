@@ -2,6 +2,7 @@
 * add: kk49: Update Python from 3.8 to 3.12 (support for Ubuntu 24.04!)
 * add: kk49: Support for COTW hp_australia
 * add: kk49: Support for COTW hp_nepal
+* add: kk49: Support for COTW hp_sh
 * add: verrasse: Support for COTW the Angler (EGS version)
 * add: verrasse: Update for latest COTW the Angler (alpheus, belisama, ceto, doris)
 * add: verrasse / r-one: Added more filenames for COTW the Angler
