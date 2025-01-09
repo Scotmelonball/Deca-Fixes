@@ -907,7 +907,9 @@ class Processor:
     for the specified bit size (32 or 64).
     """
     if value is None:
-        return value
+        return None
+    if not isinstance(value, int):
+        raise TypeError(f"Expected an integer, got {type(value)}")
     mask = 1 << bits
     if value < 0:
         value += mask
