@@ -120,7 +120,7 @@ deploy:
   prerelease: true  # Set to true if it's a prerelease; false for official releases
   draft: false      # Set to true if you want the release to be a draft
   on:
-    
+    branch: main
 
 on_success:
   - ps: cd C:\prj\deca
