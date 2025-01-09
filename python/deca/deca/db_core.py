@@ -52,10 +52,16 @@ def format_hash48(v_hash):
     return '{:012x}'.format(np.uint64(v_hash))
 
 
-def format_hash64(v_hash):
-    if v_hash is None:
-        return v_hash
-    return '{:016x}'.format(np.uint64(v_hash))
+def format_hash64(value):
+    """
+    Formats a 64-bit hash value as a hexadecimal string. Handles signed and unsigned values.
+    """
+    if value is None:
+        return value
+    # Convert signed integer to unsigned 64-bit
+    if value < 0:
+        value += (1 << 64)
+    return f"{value:016x}"  # Format as zero-padded 16-character hexadecimal
 
 
 class VfsNode:
