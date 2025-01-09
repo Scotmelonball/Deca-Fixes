@@ -970,15 +970,15 @@ class Processor:
 
                     if node.ext_hash is None and node.v_path is not None:
                         file, ext = UniPath.splitext(node.v_path)
-                        node.ext_hash = self._vfs.ext_hash(ext)
+                        node.ext_hash = self._vfs.ext_hash(ext) & np.uint32(-1)
                         updated = True
 
                     if updated:
                         db.node_update(node)
 
         for v_path in missed_vpaths:
-            v_hash = db.file_hash(v_path)
-            self._comm.trace('v_path:miss {} {:016X}'.format(v_path, np.uint64(v_hash)))
+            v_hash = db.file_hash(v_path) & np.uint64(-1)  # Convert to uint64
+            self._comm.trace('v_path:miss {} {:016X}'.format(v_path, v_hash))  # No need to cast to uint64 here
 
         return True
 
