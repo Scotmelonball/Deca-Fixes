@@ -957,7 +957,7 @@ class Processor:
                                     break
 
                     if node.file_type is None and node.v_path is not None:
-                        file, ext = os.path.splitext(node.v_path)
+                        file, ext = UniPath.splitext(node.v_path)
                         if ext[0:4] == b'.atx':
                             node.file_type = FTYPE_ATX
                             updated = True
@@ -968,19 +968,18 @@ class Processor:
                     missed_vpaths.discard(node.v_path)
 
                     if node.ext_hash is None and node.v_path is not None:
-                        file, ext = os.path.splitext(node.v_path)
-                        node.ext_hash = self._vfs.ext_hash(ext)
+                        file, ext = UniPath.splitext(node.v_path)
+                        node.ext_hash = self._vfs.ext_hash(ext) & np.uint32(0xFFFFFFFF) # Change this line
                         updated = True
 
                     if updated:
                         db.node_update(node)
 
         for v_path in missed_vpaths:
-            v_hash = db.file_hash(v_path)
-            self._comm.trace('v_path:miss {} {:016X}'.format(v_path, np.uint64(v_hash)))
+            v_hash = db.file_hash(v_path) & np.uint64(-1)  # Convert to uint64
+            self._comm.trace('v_path:miss {} {:016X}'.format(v_path, v_hash))  # No need to cast to uint64 here
 
         return True
-
 
 class MultiProcessVfsBase:
     def __init__(self, name, q_in: multiprocessing.Queue, q_out: multiprocessing.Queue):
