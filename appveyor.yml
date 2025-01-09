@@ -113,15 +113,14 @@ artifacts:
 - path: deca_gui-b%APPVEYOR_BUILD_NUMBER%.zip
 
 deploy:
-  artifact: deca_gui-b%APPVEYOR_BUILD_NUMBER%.zip
-  prerelease: true
-  description: 'Test Release'
   provider: GitHub
   auth_token:
-    secure: fJVvaKg5+L0c1JRWMkuTHDvGKEU5xqjlCCI0vdQzN6M7uiTn54ZN0eJQ6Dx830HX
+    secure: jbZmIouUCJdJMlKaPCC865VxqGOa+EJFGjqIDfMLpXB3hf9MdfRDojmwqjm8fGmL  # Replace with your encrypted PAT
+  artifact: deca_gui-b%APPVEYOR_BUILD_NUMBER%.zip  # Path to your artifact
+  prerelease: true  # Set to true if it's a prerelease; false for official releases
+  draft: false      # Set to true if you want the release to be a draft
   on:
-    # branch: master                 # release from master branch only
-    APPVEYOR_REPO_TAG: true        # deploy on tag push only
+    APPVEYOR_REPO_TAG: true  # Trigger deployment only on tagged commits
 
 on_success:
   - ps: cd C:\prj\deca
