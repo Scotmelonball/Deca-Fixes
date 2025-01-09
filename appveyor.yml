@@ -101,7 +101,7 @@ deploy:
     secure: fJVvaKg5+L0c1JRWMkuTHDvGKEU5xqjlCCI0vdQzN6M7uiTn54ZN0eJQ6Dx830HX
   on:
     # branch: master                 # release from master branch only
-    APPVEYOR_REPO_TAG: true        # deploy on tag push only
+
 
 on_success:
   - ps: cd C:\prj\deca
