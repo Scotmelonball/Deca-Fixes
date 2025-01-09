@@ -901,85 +901,81 @@ class Processor:
         return False
 
     def process_vhash_final(self, v_hash_in, db: DbWrap):
-        nodes = db.db().nodes_where_match(v_hash=v_hash_in)
+    nodes = db.db().nodes_where_match(v_hash=v_hash_in)
 
-        if db.file_hash_type == node_flag_v_hash_type_4:
-            hash_strings = db.db().hash_string_match(hash32=v_hash_in)
-        elif db.file_hash_type == node_flag_v_hash_type_8:
-            hash_strings = db.db().hash_string_match(hash64=v_hash_in)
-        else:
-            raise NotImplementedError('Unhandled Hash Type {}'.format(db.file_hash_type))
+    if db.file_hash_type == node_flag_v_hash_type_4:
+        hash_strings = db.db().hash_string_match(hash32=np.uint32(v_hash_in))  # Treat as uint32
+    elif db.file_hash_type == node_flag_v_hash_type_8:
+        hash_strings = db.db().hash_string_match(hash64=np.uint64(v_hash_in))  # Treat as uint64
+    else:
+        raise NotImplementedError('Unhandled Hash Type {}'.format(db.file_hash_type))
 
-        missed_vpaths = set()
-        h4ref_map = {}
-        for rowid, v_path, _, _, _, _ in hash_strings:
-            missed_vpaths.add(v_path)
-            h4ref_map[rowid] = db.db().hash_string_references_match(hash_row_id=rowid)
+    missed_vpaths = set()
+    h4ref_map = {}
+    for rowid, v_path, _, _, _, _ in hash_strings:
+        missed_vpaths.add(v_path)
+        h4ref_map[rowid] = db.db().hash_string_references_match(hash_row_id=rowid)
 
-        # h4rowid, src_node, is_adf_field_name, used_at_runtime, possible_ftypes in h4ref
+    # h4rowid, src_node, is_adf_field_name, used_at_runtime, possible_ftypes in h4ref
 
-        if len(nodes) > 0:
-            node: VfsNode
-            for node in nodes:
-                if node.is_valid():
-                    updated = False
+    if len(nodes) > 0:
+        node: VfsNode
+        for node in nodes:
+            if node.is_valid():
+                updated = False
 
-                    if node.file_type is None:
-                        ftype_int = ftype_list[FTYPE_NO_TYPE]
-                    else:
-                        ftype_int = ftype_list[node.file_type]
+                if node.file_type is None:
+                    ftype_int = ftype_list[FTYPE_NO_TYPE]
+                else:
+                    ftype_int = ftype_list[node.file_type]
 
-                    for rowid, v_path, _, _, _, _ in hash_strings:
-                        h4ref = h4ref_map[rowid]
+                for rowid, v_path, _, _, _, _ in hash_strings:
+                    h4ref = h4ref_map[rowid]
 
-                        if node.v_path is None:
-                            for _, src_node, _, _, possible_ftypes in h4ref:
-                                if possible_ftypes is None or possible_ftypes == 0:
-                                    possible_ftypes = ftype_list[FTYPE_ANY_TYPE]
+                    if node.v_path is None:
+                        for _, src_node, _, _, possible_ftypes in h4ref:
+                            if possible_ftypes is None or possible_ftypes == 0:
+                                possible_ftypes = ftype_list[FTYPE_ANY_TYPE]
 
-                                if (ftype_int & possible_ftypes) != 0:
-                                    # TODO this is disabled because it can cause a lot of traffic back to the
-                                    #  main thread RAGE2 has 1.7 million nodes
-                                    # self._comm.trace('v_path:add  {} {} {} {} {}'.format(
-                                    #     node.v_hash_to_str(), v_path, node.file_type, possible_ftypes, src_node))
-                                    node.v_path = v_path
-                                    updated = True
-                                    break
-                                else:
-                                    self._comm.log('v_path:skip {} {} {} {} {}'.format(
-                                        node.v_hash_to_str(), v_path, node.file_type, possible_ftypes, src_node))
+                            if (ftype_int & possible_ftypes) != 0:
+                                node.v_path = v_path
+                                updated = True
+                                break
+                            else:
+                                self._comm.log('v_path:skip {} {} {} {} {}'.format(
+                                    node.v_hash_to_str(), v_path, node.file_type, possible_ftypes, src_node))
 
-                        if node.v_path == v_path:
-                            for _, _, _, used_at_runtime, _ in h4ref:
-                                if used_at_runtime:
-                                    node.used_at_runtime_depth = 0
-                                    updated = True
-                                    break
+                    if node.v_path == v_path:
+                        for _, _, _, used_at_runtime, _ in h4ref:
+                            if used_at_runtime:
+                                node.used_at_runtime_depth = 0
+                                updated = True
+                                break
 
-                    if node.file_type is None and node.v_path is not None:
-                        file, ext = UniPath.splitext(node.v_path)
-                        if ext[0:4] == b'.atx':
-                            node.file_type = FTYPE_ATX
-                            updated = True
-                        elif ext == b'.hmddsc':
-                            node.file_type = FTYPE_HMDDSC
-                            updated = True
-
-                    missed_vpaths.discard(node.v_path)
-
-                    if node.ext_hash is None and node.v_path is not None:
-                        file, ext = UniPath.splitext(node.v_path)
-                        node.ext_hash = self._vfs.ext_hash(ext) & np.uint32(0xFFFFFFFF) # Change this line
+                if node.file_type is None and node.v_path is not None:
+                    file, ext = UniPath.splitext(node.v_path)
+                    if ext[0:4] == b'.atx':
+                        node.file_type = FTYPE_ATX
+                        updated = True
+                    elif ext == b'.hmddsc':
+                        node.file_type = FTYPE_HMDDSC
                         updated = True
 
-                    if updated:
-                        db.node_update(node)
+                missed_vpaths.discard(node.v_path)
 
-        for v_path in missed_vpaths:
-            v_hash = db.file_hash(v_path) & np.uint64(-1)  # Convert to uint64
-            self._comm.trace('v_path:miss {} {:016X}'.format(v_path, v_hash))  # No need to cast to uint64 here
+                if node.ext_hash is None and node.v_path is not None:
+                    file, ext = UniPath.splitext(node.v_path)
+                    node.ext_hash = np.uint32(self._vfs.ext_hash(ext))  # Treat as uint32
+                    updated = True
 
-        return True
+                if updated:
+                    db.node_update(node)
+
+    for v_path in missed_vpaths:
+        v_hash = np.uint64(db.file_hash(v_path))  # Treat as uint64
+        self._comm.trace('v_path:miss {} {:016X}'.format(v_path, v_hash))
+
+    return True
 
 class MultiProcessVfsBase:
     def __init__(self, name, q_in: multiprocessing.Queue, q_out: multiprocessing.Queue):
