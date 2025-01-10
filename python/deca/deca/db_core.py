@@ -852,28 +852,31 @@ class VfsDatabase(DbBase):
         return result
 
     def hash_string_match(self, hash32=None, hash48=None, hash64=None, ext_hash32=None, string=None, to_dict=False):
-
         params = []
         wheres = []
         if hash32 is not None:
             if hash32 & 0xFFFFFFFF != hash32:
                 return []
+            hash32 = normalize_hash_for_sqlite(hash32)  # Add normalization
             params.append(hash32)
             wheres.append('(hash32 == (?))')
 
         if hash48 is not None:
             if hash48 & 0xFFFFFFFFFFFF != hash48:
                 return []
+            hash48 = normalize_hash_for_sqlite(hash48)  # Add normalization
             params.append(hash48)
             wheres.append('(hash48 == (?))')
 
         if hash64 is not None:
+            hash64 = normalize_hash_for_sqlite(hash64)  # Add normalization
             params.append(hash64)
             wheres.append('(hash64 == (?))')
 
         if ext_hash32 is not None:
             if ext_hash32 & 0xFFFFFFFF != ext_hash32:
                 return []
+            ext_hash32 = normalize_hash_for_sqlite(ext_hash32)  # Add normalization
             params.append(ext_hash32)
             wheres.append('(ext_hash32 == (?))')
 
@@ -991,7 +994,13 @@ class VfsDatabase(DbBase):
 
     def hash_string_add_many_basic(self, hash_list):
         # (string, h4, h6, h8, ext_hash32)
-        hash_list_str = [(to_str(h[0]), h[1], h[2], h[3], h[4]) for h in hash_list]
+        hash_list_str = [(
+            to_str(h[0]),
+            normalize_hash_for_sqlite(h[1]),  # Add normalization
+            normalize_hash_for_sqlite(h[2]),  # Add normalization
+            normalize_hash_for_sqlite(h[3]),  # Add normalization
+            normalize_hash_for_sqlite(h[4])  # Add normalization
+        ) for h in hash_list]
         hash_list_str_unique = list(set(hash_list_str))
         self.db_execute_many(
             "INSERT OR IGNORE INTO core_strings VALUES (?,?,?,?,?)",
