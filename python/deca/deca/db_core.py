@@ -64,6 +64,22 @@ def format_hash64(value):
     return f"{value:016x}"  # Format as zero-padded 16-character hexadecimal
 
 
+# New function to convert hash values properly
+def normalize_hash_for_sqlite(hash_value):
+    """
+    Normalizes hash values to be within SQLite's signed 64-bit integer range.
+    SQLite integers are signed 64-bit, so maximum value is 2^63-1.
+    """
+    if hash_value is None:
+        return None
+
+    # Convert to signed 64-bit range if necessary
+    if hash_value > 0x7FFFFFFFFFFFFFFF:  # if greater than max signed 64-bit
+        hash_value = -(0xFFFFFFFFFFFFFFFF - hash_value + 1)
+
+    return hash_value
+
+
 class VfsNode:
     __slots__ = (
         'uid',
@@ -307,13 +323,18 @@ def db_to_vfs_node(v):
 
 
 def db_from_vfs_node(node: VfsNode):
+    # Normalize v_hash for SQLite storage
+    v_hash = node.v_hash
+    if v_hash is not None and v_hash > 0x7FFFFFFFFFFFFFFF:
+        v_hash = -(0xFFFFFFFFFFFFFFFF - v_hash + 1)
+
     v = (
         node.uid,
         node.flags,
         node.pid,
         node.index,
         node.offset,
-        node.v_hash,
+        v_hash,  # Changed from node.v_hash
         to_str(node.v_path),
         to_str(node.p_path),
         to_str(node.content_hash),
@@ -643,7 +664,8 @@ class VfsDatabase(DbBase):
         wheres = []
 
         if v_hash is not None:
-            params.append(v_hash)
+            normalized_hash = normalize_hash_for_sqlite(v_hash)  # Add this line
+            params.append(normalized_hash)  # Changed from v_hash to normalized_hash
             wheres.append('(v_hash == (?))')
 
         if v_path is not None:
